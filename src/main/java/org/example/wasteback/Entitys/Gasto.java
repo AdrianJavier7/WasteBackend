@@ -38,6 +38,6 @@ public class Gasto {
         private Usuario usuario;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Grupo.class)
-        @JoinColumn(name = "idGrupo", referencedColumnName = "id", insertable = false, updatable = false)
+        @JoinColumn(name = "id_grupo", referencedColumnName = "id", insertable = false, updatable = false)
         private Grupo grupo;
 }

@@ -28,4 +28,11 @@ public class UsuarioService {
     public void eliminar(Integer id) {
         usuarioRepository.deleteById(id);
     }
+    public List<Usuario> getAmigos(Integer userId) {
+        Usuario usuario = usuarioRepository.findById(userId).orElse(null);
+        if (usuario != null) {
+            return usuario.getAmigos();
+        }
+        return null;
+    }
 }

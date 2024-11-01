@@ -29,4 +29,7 @@ public class PagoService {
         pagoRepository.deleteById(id);
     }
 
+    //TODO: Implementar el método getBalance para calcular el balance de todo el grupo
+
+
 }
