@@ -1,7 +1,10 @@
 package org.example.wasteback.Services;
 
 import org.example.wasteback.Entitys.Pago;
+import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.PagoRepository;
+import org.example.wasteback.Repositories.UsuarioRepository;
+import org.example.wasteback.dto.UsuarioPagosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,9 @@ public class PagoService {
 
     @Autowired
     private PagoRepository pagoRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     public Pago getById(Integer id) {
         return pagoRepository.findById(id).orElse(null);
@@ -29,7 +35,15 @@ public class PagoService {
         pagoRepository.deleteById(id);
     }
 
-    //TODO: Implementar el método getBalance para calcular el balance de todo el grupo
 
+    public Double getBalance(Integer usuarioId) {
+        UsuarioPagosDTO usuario = usuarioService.getPagosUsuario(usuarioId);
+        List<Pago> pagos = usuario.getPagos();
+        Double balance = 0.0;
+        for (Pago pago : pagos) {
+            balance += pago.getImporte();
+        }
+        return balance;
+    }
 
 }

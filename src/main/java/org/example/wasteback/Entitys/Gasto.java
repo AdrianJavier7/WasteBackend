@@ -18,12 +18,6 @@ public class Gasto {
         @Column(name = "id")
         private Integer id;
 
-        @Column(name = "id_propietario")
-        private Integer idPropietario;
-
-        @Column(name = "id_grupo")
-        private Integer idGrupo;
-
         @Column(name = "nombre")
         private String nombre;
 

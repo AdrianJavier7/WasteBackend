@@ -4,6 +4,8 @@ import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.GrupoRepository;
 import org.example.wasteback.Repositories.UsuarioRepository;
+import org.example.wasteback.dto.GrupoDTO;
+import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,29 @@ public class GrupoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public Grupo getById(Integer id) {
-        return grupoRepository.findById(id).orElse(null);
+    public GrupoDTO getById(Integer id) {
+        Grupo grupo = grupoRepository.findById(id).orElse(null);
+        GrupoDTO grupoDTO = new GrupoDTO();
+
+        if (grupo != null) {
+            grupoDTO.setId(grupo.getId());
+            grupoDTO.setNombre(grupo.getNombre());
+            return grupoDTO;
+        }
+        return null;
     }
 
-    public List<Grupo> getAll() {
-        return grupoRepository.findAll();
+    public List<GrupoDTO> getAll() {
+        List<Grupo> grupos = grupoRepository.findAll();
+        List<GrupoDTO> gruposDTO = new java.util.ArrayList<>();
+
+        for (Grupo grupo : grupos) {
+            GrupoDTO grupoDTO = new GrupoDTO();
+            grupoDTO.setId(grupo.getId());
+            grupoDTO.setNombre(grupo.getNombre());
+            gruposDTO.add(grupoDTO);
+        }
+        return gruposDTO;
     }
 
     public Grupo guardar(Grupo usuario) {
@@ -41,10 +60,23 @@ public class GrupoService {
             grupoRepository.save(grupo);
         }
     }
-    public List<Usuario> getUsuariosGrupo(Integer groupId) {
-        Grupo grupo = grupoRepository.findById(groupId).orElse(null);
+    public List<UsuarioDTO> getUsuariosGrupo(Integer idGrupo) {
+        Grupo grupo = grupoRepository.findById(idGrupo).orElse(null);
         if (grupo != null) {
-            return grupo.getUsuarios();
+            List<Usuario> usuarios = grupo.getUsuarios();
+            List<UsuarioDTO> usuariosDTO = new java.util.ArrayList<>();
+
+            for (Usuario usuario : usuarios) {
+                UsuarioDTO usuarioDTO = new UsuarioDTO();
+                usuarioDTO.setId(usuario.getId());
+                usuarioDTO.setNombre(usuario.getNombre());
+                usuarioDTO.setCorreo(usuario.getCorreo());
+                usuarioDTO.setNumeroTelefono(usuario.getNumeroTelefono());
+                usuarioDTO.setContrasena(usuario.getContrasena());
+                usuarioDTO.setEstado(usuario.getEstado());
+                usuariosDTO.add(usuarioDTO);
+            }
+            return usuariosDTO;
         }
         return null;
     }

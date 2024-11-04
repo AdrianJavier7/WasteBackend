@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Services.GrupoService;
+import org.example.wasteback.dto.GrupoDTO;
+import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +18,12 @@ public class GrupoController {
         private final GrupoService grupoService;
 
         @GetMapping("/{id}")
-        public Grupo getById(@PathVariable Integer id) {
+        public GrupoDTO getById(@PathVariable Integer id) {
             return grupoService.getById(id);
         }
 
         @GetMapping
-        public List<Grupo> getAll() {
+        public List<GrupoDTO> getAll() {
             return grupoService.getAll();
         }
 
@@ -40,7 +42,7 @@ public class GrupoController {
             grupoService.anyadirUsuarioGrupo(groupId, userIds);
         }
         @GetMapping("/{id}/participantes")
-        public List<Usuario> getUsuariosGrupo(@PathVariable Integer id) {
+        public List<UsuarioDTO> getUsuariosGrupo(@PathVariable Integer id) {
             return grupoService.getUsuariosGrupo(id);
         }
 

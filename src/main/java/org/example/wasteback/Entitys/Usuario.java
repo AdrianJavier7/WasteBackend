@@ -35,13 +35,13 @@ public class Usuario {
     private String estado;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
-    @JoinTable(
-            name = "amigos",
-            schema = "waste",
-            catalog = "postgres",
-            joinColumns = @JoinColumn(name = "idUsuario_1", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "idUsuario_2", referencedColumnName = "id")
-    )
+    @JoinTable(name = "amigos",
+            joinColumns = @JoinColumn(name = "idusuario_1" ),
+            inverseJoinColumns = @JoinColumn(name = "idusuario_2"))
     private List<Usuario> amigos;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Pago.class)
+    @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
+    private List<Pago> pagos;
 
 }

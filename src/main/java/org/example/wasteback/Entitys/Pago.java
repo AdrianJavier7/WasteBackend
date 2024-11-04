@@ -17,20 +17,18 @@ public class Pago {
         @Column(name = "id")
         private Integer id;
 
-        @Column(name = "idUsuario")
-        private Integer idUsuario;
-
-        @Column(name = "idGrupo")
-        private Integer idGrupo;
-
         @Column(name = "importe")
         private Double importe;
-
-        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
-        @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
-        private Usuario usuario;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Grupo.class)
         @JoinColumn(name = "idGrupo", referencedColumnName = "id", insertable = false, updatable = false)
         private Grupo grupo;
+
+        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Gasto.class)
+        @JoinColumn(name = "idGasto", referencedColumnName = "id", insertable = false, updatable = false)
+        private Gasto gasto;
+
+        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
+        @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
+        private Usuario usuario;
 }

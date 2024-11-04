@@ -3,6 +3,7 @@ package org.example.wasteback.controllers;
 import lombok.AllArgsConstructor;
 import org.example.wasteback.Entitys.Gasto;
 import org.example.wasteback.Services.GastoService;
+import org.example.wasteback.dto.GastosDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +16,12 @@ public class GastoController {
         private final GastoService gastoService;
 
         @GetMapping("/{id}")
-        public Gasto getById(@PathVariable Integer id) {
+        public GastosDTO getById(@PathVariable Integer id) {
             return gastoService.getById(id);
         }
 
         @GetMapping
-        public List<Gasto> getAll() {
+        public List<GastosDTO> getAll() {
             return gastoService.getAll();
         }
 
