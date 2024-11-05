@@ -2,11 +2,13 @@ package org.example.wasteback.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class GastosDTO {
+public class GrupoYUsuariosDTO {
 
     private Integer id;
     private String nombre;
-    private String descripcion;
-    private Double importe;
+    List<UsuarioDTO> usuarios;
+
 }

@@ -28,7 +28,7 @@ public class Gasto {
         private String descripcion;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
-        @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
+        @JoinColumn(name = "id_usuario", referencedColumnName = "id", insertable = false, updatable = false)
         private Usuario usuario;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Grupo.class)

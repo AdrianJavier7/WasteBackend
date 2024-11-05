@@ -1,6 +1,8 @@
 package org.example.wasteback.Services;
 
 import org.example.wasteback.Entitys.Gasto;
+import org.example.wasteback.Entitys.Grupo;
+import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.GastoRepository;
 import org.example.wasteback.dto.GastosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,6 @@ public class GastoService {
             gastoDTO.setNombre(gasto.getNombre());
             gastoDTO.setDescripcion(gasto.getDescripcion());
             gastoDTO.setImporte(gasto.getPrecio());
-            gastoDTO.setIdPropietario(gasto.getUsuario().getId());
-            gastoDTO.setIdGrupo(gasto.getGrupo().getId());
             return gastoDTO;
         }
         return null;
@@ -41,14 +41,31 @@ public class GastoService {
            gastoDTO.setNombre(gasto.getNombre());
            gastoDTO.setDescripcion(gasto.getDescripcion());
            gastoDTO.setImporte(gasto.getPrecio());
-           gastoDTO.setIdPropietario(gasto.getUsuario().getId());
-           gastoDTO.setIdGrupo(gasto.getGrupo().getId());
            gastosDTO.add(gastoDTO);
        }
        return gastosDTO;
     }
 
-    public Gasto guardar(Gasto gasto) {
+    public List<GastosDTO> getGastosByGrupo2(Integer idGrupo) {
+        List<Gasto> gastos = gastoRepository.findAllByGrupo_Id(idGrupo);
+        List<GastosDTO> gastosDTO = new ArrayList<>();
+
+        for (Gasto gasto : gastos) {
+            GastosDTO gastoDTO = new GastosDTO();
+            gastoDTO.setId(gasto.getId());
+            gastoDTO.setNombre(gasto.getNombre());
+            gastoDTO.setDescripcion(gasto.getDescripcion());
+            gastoDTO.setImporte(gasto.getPrecio());
+            gastosDTO.add(gastoDTO);
+        }
+        return gastosDTO;
+    }
+    public Gasto guardar(GastosDTO gastoDTO) {
+        Gasto gasto = new Gasto();
+        gasto.setNombre(gastoDTO.getNombre());
+        gasto.setDescripcion(gastoDTO.getDescripcion());
+        gasto.setPrecio(gastoDTO.getImporte());
+
         return gastoRepository.save(gasto);
     }
 

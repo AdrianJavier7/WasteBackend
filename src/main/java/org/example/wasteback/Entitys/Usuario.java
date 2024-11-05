@@ -36,12 +36,24 @@ public class Usuario {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
     @JoinTable(name = "amigos",
-            joinColumns = @JoinColumn(name = "idusuario_1" ),
-            inverseJoinColumns = @JoinColumn(name = "idusuario_2"))
+            joinColumns = @JoinColumn(name = "id_usuario_1" ),
+            inverseJoinColumns = @JoinColumn(name = "id_usuario_2"))
     private List<Usuario> amigos;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Pago.class)
-    @JoinColumn(name = "idUsuario", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id", insertable = false, updatable = false)
     private List<Pago> pagos;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Grupo.class)
+    @JoinTable(
+            name = "usuario_pertenece_grupo",
+            schema = "waste",
+            catalog = "postgres",
+            joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "id_grupo", referencedColumnName = "id")
+    )
+    private List<Grupo> grupos;
+
+
 
 }

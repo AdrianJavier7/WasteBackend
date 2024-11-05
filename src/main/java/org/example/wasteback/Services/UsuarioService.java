@@ -2,8 +2,8 @@ package org.example.wasteback.Services;
 
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.UsuarioRepository;
+import org.example.wasteback.controllers.AmigosDTO;
 import org.example.wasteback.dto.UsuarioDTO;
-import org.example.wasteback.dto.UsuarioPagosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,20 +36,6 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElse(null);
     }
 
-    public UsuarioPagosDTO getPagosUsuario(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
-        UsuarioPagosDTO usuarioPagosDTO = new UsuarioPagosDTO();
-        if(usuario != null) {
-            usuarioPagosDTO.setId(usuario.getId());
-            usuarioPagosDTO.setNombre(usuario.getNombre());
-            usuarioPagosDTO.setCorreo(usuario.getCorreo());
-            usuarioPagosDTO.setNumeroTelefono(usuario.getNumeroTelefono());
-            usuarioPagosDTO.setEstado(usuario.getEstado());
-            usuarioPagosDTO.setPagos(usuario.getPagos());
-            return usuarioPagosDTO;
-        }
-        return null;
-    }
 
     public List<UsuarioDTO> getAll() {
         List<Usuario> usuarios = usuarioRepository.findAll();
@@ -75,11 +61,22 @@ public class UsuarioService {
     public void eliminar(Integer id) {
         usuarioRepository.deleteById(id);
     }
-    public List<Usuario> getAmigos(Integer userId) {
+    public List<AmigosDTO> getAmigos(Integer userId) {
         Usuario usuario = usuarioRepository.findById(userId).orElse(null);
+        List<AmigosDTO> amigosDTO = new ArrayList<>();
         if (usuario != null) {
-            return usuario.getAmigos();
+
+            for (Usuario amigo : usuario.getAmigos()) {
+
+                AmigosDTO amigos = new AmigosDTO();
+                amigos.setId(amigo.getId());
+                amigos.setNombre(amigo.getNombre());
+                amigosDTO.add(amigos);
+            }
+
+            return amigosDTO;
         }
         return null;
     }
+
 }

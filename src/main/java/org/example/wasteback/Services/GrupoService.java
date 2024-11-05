@@ -4,7 +4,9 @@ import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.GrupoRepository;
 import org.example.wasteback.Repositories.UsuarioRepository;
+import org.example.wasteback.dto.EliminarUsrDTO;
 import org.example.wasteback.dto.GrupoDTO;
+import org.example.wasteback.dto.GrupoYUsuariosDTO;
 import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class GrupoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+
     public GrupoDTO getById(Integer id) {
         Grupo grupo = grupoRepository.findById(id).orElse(null);
         GrupoDTO grupoDTO = new GrupoDTO();
@@ -29,6 +32,10 @@ public class GrupoService {
             return grupoDTO;
         }
         return null;
+    }
+
+    public Grupo getGrupoById(Integer id) {
+        return grupoRepository.findById(id).orElse(null);
     }
 
     public List<GrupoDTO> getAll() {
@@ -44,21 +51,67 @@ public class GrupoService {
         return gruposDTO;
     }
 
-    public Grupo guardar(Grupo usuario) {
-        return grupoRepository.save(usuario);
+    public List<GrupoDTO> getGruposUsuario(Integer idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario).orElse(null);
+        if (usuario != null) {
+            List<Grupo> grupos = usuario.getGrupos();
+            List<GrupoDTO> gruposDTO = new java.util.ArrayList<>();
+
+            for (Grupo grupo : grupos) {
+                GrupoDTO grupoDTO = new GrupoDTO();
+                grupoDTO.setId(grupo.getId());
+                grupoDTO.setNombre(grupo.getNombre());
+                gruposDTO.add(grupoDTO);
+            }
+            return gruposDTO;
+        }
+        return null;
+    }
+
+    public GrupoDTO guardar(GrupoDTO GrupoDTO) {
+        Grupo grupo = new Grupo();
+        grupo.setNombre(GrupoDTO.getNombre());
+        grupo = grupoRepository.save(grupo);
+
+        GrupoDTO.setId(grupo.getId());
+        return GrupoDTO;
     }
 
     public void eliminar(Integer id) {
         grupoRepository.deleteById(id);
     }
 
-    public void anyadirUsuarioGrupo(Integer groupId, List<Integer> userIds) {
+    public GrupoYUsuariosDTO anyadirUsuarioGrupo(Integer groupId, Integer userIds) {
         Grupo grupo = grupoRepository.findById(groupId).orElse(null);
         if (grupo != null) {
-            List<Usuario> usuarios = usuarioRepository.findAllById(userIds);
-            grupo.setUsuarios(usuarios);
-            grupoRepository.save(grupo);
+            Usuario usuario = usuarioRepository.findById(userIds).orElse(null);
+            if (usuario != null) {
+                List<Usuario> usuarios = grupo.getUsuarios();
+                usuarios.add(usuario);
+                grupo.setUsuarios(usuarios);
+                grupoRepository.save(grupo);
+                GrupoYUsuariosDTO grupoYUsuariosDTO = new GrupoYUsuariosDTO();
+
+                grupoYUsuariosDTO.setId(grupo.getId());
+                grupoYUsuariosDTO.setNombre(grupo.getNombre());
+                List<UsuarioDTO> usuariosDTO = new java.util.ArrayList<>();
+                for (Usuario usuario1 : usuarios) {
+                    UsuarioDTO usuarioDTO = new UsuarioDTO();
+                    usuarioDTO.setId(usuario1.getId());
+                    usuarioDTO.setNombre(usuario1.getNombre());
+                    usuarioDTO.setCorreo(usuario1.getCorreo());
+                    usuarioDTO.setNumeroTelefono(usuario1.getNumeroTelefono());
+                    usuarioDTO.setContrasena(usuario1.getContrasena());
+                    usuarioDTO.setEstado(usuario1.getEstado());
+                    usuariosDTO.add(usuarioDTO);
+                }
+                grupoYUsuariosDTO.setUsuarios(usuariosDTO);
+                return grupoYUsuariosDTO;
+
+
+            }
         }
+        return null;
     }
     public List<UsuarioDTO> getUsuariosGrupo(Integer idGrupo) {
         Grupo grupo = grupoRepository.findById(idGrupo).orElse(null);
@@ -81,13 +134,18 @@ public class GrupoService {
         return null;
     }
 
-    public void eliminarUsuarioGrupo(Integer groupId, List<Integer> userIds) {
-        Grupo grupo = grupoRepository.findById(groupId).orElse(null);
+    public void eliminarUsuarioGrupo(EliminarUsrDTO eliminarUsrDTO) {
+        Grupo grupo = grupoRepository.findById(eliminarUsrDTO.getIdGrupo()).orElse(null);
         if (grupo != null) {
-            List<Usuario> usuarios = grupo.getUsuarios();
-            usuarios.removeIf(usuario -> userIds.contains(usuario.getId()));
-            grupo.setUsuarios(usuarios);
-            grupoRepository.save(grupo);
+            Usuario usuario = usuarioRepository.findById(eliminarUsrDTO.getIdUsuario()).orElse(null);
+            if (usuario != null) {
+                List<Usuario> usuarios = grupo.getUsuarios();
+                usuarios.remove(usuario);
+                grupo.setUsuarios(usuarios);
+                grupoRepository.save(grupo);
+            }
         }
     }
+
 }
+

@@ -1,9 +1,10 @@
 package org.example.wasteback.dto;
 
-public class ParticipantesGrupoDTO {
+import lombok.Data;
+
+@Data
+public class EliminarUsrDTO {
 
     private Integer idGrupo;
     private Integer idUsuario;
-    private String nombreUsuario;
-
 }

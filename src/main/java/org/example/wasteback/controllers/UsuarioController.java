@@ -36,7 +36,7 @@ public class UsuarioController {
         }
 
         @GetMapping("/amigos/{id}")
-        public List<Usuario> getAmigos(@PathVariable Integer id) {
+        public List<AmigosDTO> getAmigos(@PathVariable Integer id) {
             return usuarioService.getAmigos(id);
         }
 }

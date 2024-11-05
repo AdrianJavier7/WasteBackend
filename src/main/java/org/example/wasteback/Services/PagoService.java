@@ -1,13 +1,16 @@
 package org.example.wasteback.Services;
 
+import org.example.wasteback.Entitys.Gasto;
+import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Pago;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.PagoRepository;
-import org.example.wasteback.Repositories.UsuarioRepository;
-import org.example.wasteback.dto.UsuarioPagosDTO;
+import org.example.wasteback.dto.GastosDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -17,7 +20,10 @@ public class PagoService {
     private PagoRepository pagoRepository;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private GrupoService grupoService;
+
+    @Autowired
+    private GastoService gastoService;
 
     public Pago getById(Integer id) {
         return pagoRepository.findById(id).orElse(null);
@@ -36,14 +42,34 @@ public class PagoService {
     }
 
 
-    public Double getBalance(Integer usuarioId) {
-        UsuarioPagosDTO usuario = usuarioService.getPagosUsuario(usuarioId);
-        List<Pago> pagos = usuario.getPagos();
-        Double balance = 0.0;
-        for (Pago pago : pagos) {
-            balance += pago.getImporte();
+    public HashMap<String, Double> getBalance(Integer grupoId) {
+
+        HashMap<String, Double> balancesPorUsuario = new HashMap<>();
+
+        List<GastosDTO> gastos = gastoService.getGastosByGrupo2(grupoId);
+
+        Grupo grupo = grupoService.getGrupoById(grupoId);
+
+        Double totalGastos = 0.0;
+
+        for( GastosDTO gasto: gastos ){
+            totalGastos += gasto.getImporte();
         }
-        return balance;
+
+        Double cadaUsuarioPaga = totalGastos / grupo.getUsuarios().size();
+
+        for(Usuario usuario: grupo.getUsuarios()){
+
+            if(usuario.getPagos() != null){
+                for( Pago pago: usuario.getPagos() ){
+                        cadaUsuarioPaga -= pago.getImporte();
+                        balancesPorUsuario.put(usuario.getNombre(), cadaUsuarioPaga);
+                }
+            } else {
+                balancesPorUsuario.put(usuario.getNombre(), 0.0);
+            }
+        }
+        return balancesPorUsuario;
     }
 
 }
