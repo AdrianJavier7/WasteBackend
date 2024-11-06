@@ -60,12 +60,15 @@ public class PagoService {
 
         for(Usuario usuario: grupo.getUsuarios()){
 
-            if(usuario.getPagos() != null){
+            if(!usuario.getPagos().isEmpty()){
+                System.out.println("Si pase " + usuario.getNombre());
                 for( Pago pago: usuario.getPagos() ){
                         cadaUsuarioPaga -= pago.getImporte();
                         balancesPorUsuario.put(usuario.getNombre(), cadaUsuarioPaga);
                 }
+                System.out.println(balancesPorUsuario);
             } else {
+                System.out.println("No pase " + usuario.getNombre());
                 balancesPorUsuario.put(usuario.getNombre(), 0.0);
             }
         }
