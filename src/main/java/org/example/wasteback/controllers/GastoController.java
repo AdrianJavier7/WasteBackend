@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.wasteback.Entitys.Gasto;
 import org.example.wasteback.Services.GastoService;
 import org.example.wasteback.dto.GastosDTO;
+import org.example.wasteback.dto.GastosGrupoDTO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class GastoController {
         }
 
         @PostMapping("/guardar")
-        public Gasto guardar(@RequestBody GastosDTO gasto) {
+        public GastosGrupoDTO guardar(@RequestBody GastosGrupoDTO gasto) {
             return gastoService.guardar(gasto);
         }
 

@@ -1,6 +1,7 @@
 package org.example.wasteback.controllers;
 
 import lombok.AllArgsConstructor;
+import org.example.wasteback.Entitys.Gasto;
 import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Services.GastoService;
@@ -38,6 +39,10 @@ public class GrupoController {
         @PostMapping("/guardar")
         public GrupoDTO guardar(@RequestBody GrupoDTO grupoDTO) {
             return grupoService.guardar(grupoDTO);
+        }
+        @PostMapping("/gasto")
+        public GastosGrupoDTO guardarGasto(@RequestBody GastosGrupoDTO gasto) {
+            return gastoService.guardar(gasto);
         }
 
         @DeleteMapping("/{id}")

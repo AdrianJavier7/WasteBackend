@@ -5,6 +5,7 @@ import org.example.wasteback.Entitys.Grupo;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.GastoRepository;
 import org.example.wasteback.dto.GastosDTO;
+import org.example.wasteback.dto.GastosGrupoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class GastoService {
 
     @Autowired
     private GastoRepository gastoRepository;
+
+    @Autowired
+    private GrupoService grupoService;
 
     public GastosDTO getById(Integer id) {
         Gasto gasto = gastoRepository.findById(id).orElse(null);
@@ -60,13 +64,22 @@ public class GastoService {
         }
         return gastosDTO;
     }
-    public Gasto guardar(GastosDTO gastoDTO) {
+    public GastosGrupoDTO guardar(GastosGrupoDTO gastoDTO) {
         Gasto gasto = new Gasto();
         gasto.setNombre(gastoDTO.getNombre());
         gasto.setDescripcion(gastoDTO.getDescripcion());
         gasto.setPrecio(gastoDTO.getImporte());
+        gasto.setGrupo(grupoService.getGrupoById(gastoDTO.getIdGrupo()));
+        gastoRepository.save(gasto);
 
-        return gastoRepository.save(gasto);
+        GastosGrupoDTO gastoDTO1 = new GastosGrupoDTO();
+        gastoDTO1.setId(gasto.getId());
+        gastoDTO1.setNombre(gasto.getNombre());
+        gastoDTO1.setDescripcion(gasto.getDescripcion());
+        gastoDTO1.setImporte(gasto.getPrecio());
+        gastoDTO1.setIdGrupo(gasto.getGrupo().getId());
+
+        return gastoDTO1;
     }
 
     public void eliminar(Integer id) {

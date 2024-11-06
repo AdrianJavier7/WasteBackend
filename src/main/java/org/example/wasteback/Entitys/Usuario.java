@@ -34,7 +34,7 @@ public class Usuario {
     @Column(name = "estado")
     private String estado;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
     @JoinTable(name = "amigos",
             joinColumns = @JoinColumn(name = "id_usuario_1" ),
             inverseJoinColumns = @JoinColumn(name = "id_usuario_2"))
