@@ -3,6 +3,7 @@ package org.example.wasteback.controllers;
 import lombok.AllArgsConstructor;
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Services.UsuarioService;
+import org.example.wasteback.dto.AmigosDTO;
 import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.web.bind.annotation.*;
 

@@ -2,7 +2,7 @@ package org.example.wasteback.Services;
 
 import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Repositories.UsuarioRepository;
-import org.example.wasteback.controllers.AmigosDTO;
+import org.example.wasteback.dto.AmigosDTO;
 import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

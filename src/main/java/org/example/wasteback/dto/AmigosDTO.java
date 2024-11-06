@@ -1,4 +1,4 @@
-package org.example.wasteback.controllers;
+package org.example.wasteback.dto;
 
 import lombok.Data;
 
