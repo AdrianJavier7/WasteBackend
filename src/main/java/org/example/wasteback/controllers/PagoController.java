@@ -2,9 +2,7 @@ package org.example.wasteback.controllers;
 
 import lombok.AllArgsConstructor;
 import org.example.wasteback.Entitys.Pago;
-import org.example.wasteback.Entitys.Usuario;
 import org.example.wasteback.Services.PagoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

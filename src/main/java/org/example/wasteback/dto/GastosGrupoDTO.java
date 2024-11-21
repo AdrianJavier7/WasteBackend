@@ -9,6 +9,5 @@ public class GastosGrupoDTO {
         private String nombre;
         private String descripcion;
         private Double importe;
-
         private Integer idGrupo;
 }

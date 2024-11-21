@@ -30,6 +30,14 @@ public class GastoService {
             gastoDTO.setNombre(gasto.getNombre());
             gastoDTO.setDescripcion(gasto.getDescripcion());
             gastoDTO.setImporte(gasto.getPrecio());
+            gastoDTO.setNombreProp(gasto.getUsuario().getNombre());
+
+            List<String> participantes = new ArrayList<>();
+            for  (Usuario usuario : gasto.getGrupo().getUsuarios()) {
+                participantes.add(usuario.getNombre());
+            }
+            gastoDTO.setParticipantes(participantes);
+
             return gastoDTO;
         }
         return null;
@@ -60,6 +68,23 @@ public class GastoService {
             gastoDTO.setNombre(gasto.getNombre());
             gastoDTO.setDescripcion(gasto.getDescripcion());
             gastoDTO.setImporte(gasto.getPrecio());
+
+            Usuario usuario2 = gasto.getUsuario();
+            if (usuario2 != null) {
+                gastoDTO.setNombreProp(usuario2.getNombre());
+            } else {
+                gastoDTO.setNombreProp("Unknown");
+            }
+
+
+            List<String> participantes = new ArrayList<>();
+            for  (Usuario usuario : gasto.getGrupo().getUsuarios()) {
+                participantes.add(usuario.getNombre());
+            }
+
+
+            gastoDTO.setParticipantes(participantes);
+
             gastosDTO.add(gastoDTO);
         }
         return gastosDTO;
@@ -70,6 +95,7 @@ public class GastoService {
         gasto.setDescripcion(gastoDTO.getDescripcion());
         gasto.setPrecio(gastoDTO.getImporte());
         gasto.setGrupo(grupoService.getGrupoById(gastoDTO.getIdGrupo()));
+        gasto.setUsuario(grupoService.getGrupoById(gastoDTO.getIdGrupo()).getUsuarios().get(0));
         gastoRepository.save(gasto);
 
         GastosGrupoDTO gastoDTO1 = new GastosGrupoDTO();

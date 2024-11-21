@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface GrupoRepository extends JpaRepository<Grupo, Integer> {
 
+    Grupo findByNombre(String nombre);
 }

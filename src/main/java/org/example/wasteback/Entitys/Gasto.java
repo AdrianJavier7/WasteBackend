@@ -4,6 +4,8 @@ package org.example.wasteback.Entitys;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "gastos", schema = "waste", catalog="postgres")
 @Getter
@@ -28,7 +30,7 @@ public class Gasto {
         private String descripcion;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Usuario.class)
-        @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+        @JoinColumn(name = "id_propietario", referencedColumnName = "id")
         private Usuario usuario;
 
         @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, targetEntity = Grupo.class)

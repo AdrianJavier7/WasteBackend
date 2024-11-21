@@ -25,6 +25,11 @@ public class GrupoController {
             return grupoService.getById(id);
         }
 
+        @GetMapping("/nombre/{nombre}")
+        public GrupoDTO getByName(@PathVariable String nombre) {
+            return grupoService.getByName(nombre);
+        }
+
 
         @GetMapping({"/usuario/{id}"})
         public List<GrupoDTO> getGruposUsuario(@PathVariable Integer id) {

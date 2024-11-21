@@ -25,7 +25,7 @@ public class GastoController {
         public List<GastosDTO> getAll() {
             return gastoService.getAll();
         }
-        @GetMapping("/grupo/{id}")
+        @GetMapping("/gastos/{id}")
         public List<GastosDTO> getGastosByGrupo(@PathVariable Integer id) {
             return gastoService.getGastosByGrupo2(id);
         }

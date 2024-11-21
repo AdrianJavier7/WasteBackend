@@ -11,6 +11,7 @@ import org.example.wasteback.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +30,14 @@ public class GrupoService {
         if (grupo != null) {
             grupoDTO.setId(grupo.getId());
             grupoDTO.setNombre(grupo.getNombre());
+            List<String> participantes = new ArrayList<>();
+            List<Integer> idParticipantes = new ArrayList<>();
+            for (Usuario usuario : grupo.getUsuarios()) {
+                participantes.add(usuario.getNombre());
+                idParticipantes.add(usuario.getId());
+            }
+            grupoDTO.setParticipantes(participantes);
+            grupoDTO.setIdParticipantes(idParticipantes);
             return grupoDTO;
         }
         return null;
@@ -61,16 +70,32 @@ public class GrupoService {
                 GrupoDTO grupoDTO = new GrupoDTO();
                 grupoDTO.setId(grupo.getId());
                 grupoDTO.setNombre(grupo.getNombre());
+
+                List<String> participantes = new ArrayList<>();
+                List<Integer> idParticipantes = new ArrayList<>();
+                for (Usuario usuario1 : grupo.getUsuarios()) {
+                    participantes.add(usuario1.getNombre());
+                    idParticipantes.add(usuario1.getId());
+                }
+                grupoDTO.setParticipantes(participantes);
+                grupoDTO.setIdParticipantes(idParticipantes);
+
                 gruposDTO.add(grupoDTO);
             }
             return gruposDTO;
         }
         return null;
     }
-
     public GrupoDTO guardar(GrupoDTO GrupoDTO) {
         Grupo grupo = new Grupo();
         grupo.setNombre(GrupoDTO.getNombre());
+        List<Usuario> usuarios = new ArrayList<>();
+
+        for (Integer id : GrupoDTO.getIdParticipantes()) {
+            Usuario usuario = usuarioRepository.findById(id).orElse(null);
+            usuarios.add(usuario);
+        }
+        grupo.setUsuarios(usuarios);
         grupo = grupoRepository.save(grupo);
 
         GrupoDTO.setId(grupo.getId());
@@ -147,5 +172,21 @@ public class GrupoService {
         }
     }
 
+    public GrupoDTO getByName(String nombre) {
+        Grupo grupo = grupoRepository.findByNombre(nombre);
+        GrupoDTO grupoDTO = new GrupoDTO();
+
+        if (grupo != null) {
+            grupoDTO.setId(grupo.getId());
+            grupoDTO.setNombre(grupo.getNombre());
+            List<String> participantes = new ArrayList<>();
+            for (Usuario usuario : grupo.getUsuarios()) {
+                participantes.add(usuario.getNombre());
+            }
+            grupoDTO.setParticipantes(participantes);
+            return grupoDTO;
+        }
+        return null;
+    }
 }
 
