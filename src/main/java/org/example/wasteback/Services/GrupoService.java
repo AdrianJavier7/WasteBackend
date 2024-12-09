@@ -66,6 +66,9 @@ public class GrupoService {
             List<Grupo> grupos = usuario.getGrupos();
             List<GrupoDTO> gruposDTO = new java.util.ArrayList<>();
 
+            if(grupos == null || grupos.isEmpty()) {
+                throw new IllegalArgumentException("El usuario no tiene grupos");
+            }
             for (Grupo grupo : grupos) {
                 GrupoDTO grupoDTO = new GrupoDTO();
                 grupoDTO.setId(grupo.getId());
@@ -84,22 +87,33 @@ public class GrupoService {
             }
             return gruposDTO;
         }
-        return null;
+        throw new IllegalArgumentException("El usuario no existe");
     }
-    public GrupoDTO guardar(GrupoDTO GrupoDTO) {
-        Grupo grupo = new Grupo();
-        grupo.setNombre(GrupoDTO.getNombre());
-        List<Usuario> usuarios = new ArrayList<>();
-
-        for (Integer id : GrupoDTO.getIdParticipantes()) {
-            Usuario usuario = usuarioRepository.findById(id).orElse(null);
-            usuarios.add(usuario);
+    public GrupoDTO guardar(GrupoDTO grupoDTO) {
+        if (grupoDTO == null || grupoDTO.getNombre() == null || grupoDTO.getNombre().isEmpty()) {
+            throw new IllegalArgumentException("El grupo no puede ser nulo o vacio");
         }
-        grupo.setUsuarios(usuarios);
-        grupo = grupoRepository.save(grupo);
 
-        GrupoDTO.setId(grupo.getId());
-        return GrupoDTO;
+        try {
+            Grupo grupo = new Grupo();
+            grupo.setNombre(grupoDTO.getNombre());
+            List<Usuario> usuarios = new ArrayList<>();
+
+            for (Integer id : grupoDTO.getIdParticipantes()) {
+                Usuario usuario = usuarioRepository.findById(id).orElse(null);
+                if (usuario != null) {
+                    usuarios.add(usuario);
+                }
+            }
+            grupo.setUsuarios(usuarios);
+            grupo = grupoRepository.save(grupo);
+
+            grupoDTO.setId(grupo.getId());
+            return grupoDTO;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void eliminar(Integer id) {
@@ -110,7 +124,7 @@ public class GrupoService {
         Grupo grupo = grupoRepository.findById(groupId).orElse(null);
         if (grupo != null) {
             Usuario usuario = usuarioRepository.findById(userIds).orElse(null);
-            if (usuario != null) {
+            if (usuario != null && !grupo.getUsuarios().contains(usuario)) {
                 List<Usuario> usuarios = grupo.getUsuarios();
                 usuarios.add(usuario);
                 grupo.setUsuarios(usuarios);
@@ -135,6 +149,7 @@ public class GrupoService {
 
 
             }
+            throw new IllegalArgumentException("El usuario ya pertenece al grupo");
         }
         return null;
     }
@@ -156,10 +171,10 @@ public class GrupoService {
             }
             return usuariosDTO;
         }
-        return null;
+        throw new IllegalArgumentException("El grupo no existe");
     }
 
-    public void eliminarUsuarioGrupo(EliminarUsrDTO eliminarUsrDTO) {
+    public Boolean eliminarUsuarioGrupo(EliminarUsrDTO eliminarUsrDTO) {
         Grupo grupo = grupoRepository.findById(eliminarUsrDTO.getIdGrupo()).orElse(null);
         if (grupo != null) {
             Usuario usuario = usuarioRepository.findById(eliminarUsrDTO.getIdUsuario()).orElse(null);
@@ -168,8 +183,10 @@ public class GrupoService {
                 usuarios.remove(usuario);
                 grupo.setUsuarios(usuarios);
                 grupoRepository.save(grupo);
+                return true;
             }
         }
+        return false;
     }
 
     public GrupoDTO getByName(String nombre) {

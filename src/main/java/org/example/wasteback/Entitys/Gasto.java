@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "gastos", schema = "waste", catalog="postgres")
+@Table(name = "gastos", schema = "waste" , catalog = "postgres")
 @Getter
 @Setter
 @AllArgsConstructor

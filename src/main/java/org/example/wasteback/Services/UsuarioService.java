@@ -63,20 +63,23 @@ public class UsuarioService {
     }
     public List<AmigosDTO> getAmigos(Integer userId) {
         Usuario usuario = usuarioRepository.findById(userId).orElse(null);
-        List<AmigosDTO> amigosDTO = new ArrayList<>();
-        if (usuario != null) {
-
-            for (Usuario amigo : usuario.getAmigos()) {
-
-                AmigosDTO amigos = new AmigosDTO();
-                amigos.setId(amigo.getId());
-                amigos.setNombre(amigo.getNombre());
-                amigosDTO.add(amigos);
-            }
-
-            return amigosDTO;
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no existe");
         }
-        return null;
+
+        List<AmigosDTO> amigosDTO = new ArrayList<>();
+        if (usuario.getAmigos().isEmpty()) {
+            throw new IllegalArgumentException("El usuario no tiene amigos");
+        }
+
+        for (Usuario amigo : usuario.getAmigos()) {
+            AmigosDTO amigos = new AmigosDTO();
+            amigos.setId(amigo.getId());
+            amigos.setNombre(amigo.getNombre());
+            amigosDTO.add(amigos);
+        }
+
+        return amigosDTO;
     }
 
 }

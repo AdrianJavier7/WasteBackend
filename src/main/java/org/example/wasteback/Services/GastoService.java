@@ -59,7 +59,15 @@ public class GastoService {
     }
 
     public List<GastosDTO> getGastosByGrupo2(Integer idGrupo) {
+        if (idGrupo == null || idGrupo <= 0) {
+            throw new IllegalArgumentException("El ID del grupo no puede ser nulo o negativo");
+        }
+
         List<Gasto> gastos = gastoRepository.findAllByGrupo_Id(idGrupo);
+        if (gastos == null || gastos.isEmpty()) {
+            throw new IllegalArgumentException("No se encontraron gastos para el grupo especificado");
+        }
+
         List<GastosDTO> gastosDTO = new ArrayList<>();
 
         for (Gasto gasto : gastos) {
@@ -70,26 +78,29 @@ public class GastoService {
             gastoDTO.setImporte(gasto.getPrecio());
 
             Usuario usuario2 = gasto.getUsuario();
-            if (usuario2 != null) {
-                gastoDTO.setNombreProp(usuario2.getNombre());
-            } else {
-                gastoDTO.setNombreProp("Unknown");
+            if (usuario2 == null) {
+                throw new IllegalArgumentException("El usuario no puede ser nulo");
             }
-
+            gastoDTO.setNombreProp(usuario2.getNombre());
 
             List<String> participantes = new ArrayList<>();
-            for  (Usuario usuario : gasto.getGrupo().getUsuarios()) {
+            for (Usuario usuario : gasto.getGrupo().getUsuarios()) {
                 participantes.add(usuario.getNombre());
             }
 
-
             gastoDTO.setParticipantes(participantes);
-
             gastosDTO.add(gastoDTO);
         }
         return gastosDTO;
     }
     public GastosGrupoDTO guardar(GastosGrupoDTO gastoDTO) {
+        if (gastoDTO.getImporte() == null || gastoDTO.getImporte() <= 0) {
+            throw new IllegalArgumentException("El importe no puede ser nulo o negativo");
+        }
+        if (gastoDTO.getNombre() == null || gastoDTO.getNombre().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede ser nulo o vacío");
+        }
+
         Gasto gasto = new Gasto();
         gasto.setNombre(gastoDTO.getNombre());
         gasto.setDescripcion(gastoDTO.getDescripcion());
